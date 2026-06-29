@@ -45,12 +45,17 @@ android {
 
 publishing {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/addskya/orange-io")
-            credentials {
-                username = (findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_ACTOR")
-                password = (findProperty("gpr.key") as String?) ?: System.getenv("GITHUB_TOKEN")
+        if (
+            ((findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_ACTOR")).isNullOrBlank().not() &&
+            ((findProperty("gpr.key") as String?) ?: System.getenv("GITHUB_TOKEN")).isNullOrBlank().not()
+        ) {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/addskya/orange-io")
+                credentials {
+                    username = (findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_ACTOR")
+                    password = (findProperty("gpr.key") as String?) ?: System.getenv("GITHUB_TOKEN")
+                }
             }
         }
     }
